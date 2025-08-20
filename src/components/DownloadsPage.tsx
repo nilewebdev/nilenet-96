@@ -53,10 +53,11 @@ export const DownloadsPage: React.FC = () => {
 
   const cancel = async (id: string) => {
     try {
+      // @ts-ignore - Tauri API may not be available in all environments
       const { invoke } = await import('@tauri-apps/api/tauri');
-      await invoke('cancel_download', id);
+      await invoke('cancel_download', { id });
     } catch (e) {
-      console.error(e);
+      console.warn('Tauri cancel_download not available:', e);
     }
   };
 

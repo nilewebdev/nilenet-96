@@ -48,7 +48,7 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
   const [privateTabs, setPrivateTabs] = useState<Tab[]>([])
   const [activeTabId, setActiveTabId] = useState<string | null>(null)
   const [isPrivateMode, setIsPrivateMode] = useState(false)
-  const [currentView, setCurrentView] = useState<'browser' | 'alltabs' | 'home' | 'versions' | 'search-engine-info' | 'history' | 'bookmarks' | 'search-indexing'>('home')
+  const [currentView, setCurrentView] = useState<'browser' | 'alltabs' | 'home' | 'versions' | 'search-engine-info' | 'history' | 'bookmarks' | 'search-indexing' | 'downloads'>('home')
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [currentUrl, setCurrentUrl] = useState('')
@@ -59,7 +59,7 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [showMigration, setShowMigration] = useState(false)
   const [showProtocolHandler, setShowProtocolHandler] = useState(false)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const iframeRef = useRef<any>(null)
   const historyRef = useRef<{url: string, displayUrl: string}[]>([])
   const historyIndexRef = useRef(-1)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -337,6 +337,10 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
 
   const handleShowSearchIndexing = () => {
     setCurrentView('search-indexing')
+  }
+
+  const handleShowDownloads = () => {
+    setCurrentView('downloads')
   }
 
   const togglePrivateMode = () => {
@@ -720,6 +724,10 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
             onClose={() => setCurrentView('home')}
           />
         )}
+
+        {currentView === 'downloads' && (
+          <DownloadsPage />
+        )}
       </div>
 
       <MainFooter
@@ -738,6 +746,7 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
         onShowHistory={handleShowHistory}
         onShowBookmarks={handleShowBookmarks}
         onShowSearchIndexing={handleShowSearchIndexing}
+        onShowDownloads={handleShowDownloads}
       />
     </div>
   )
