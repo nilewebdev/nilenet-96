@@ -18,6 +18,7 @@ import { useBrowserShortcuts } from '@/hooks/useBrowserShortcuts'
 import { BrowserMigration } from './BrowserMigration'
 import { ProtocolHandler } from './ProtocolHandler'
 import { EnhancedNavigation } from './EnhancedNavigation'
+import { SearchIndexing, indexPageForSearch } from './SearchIndexing'
 
 interface BrowserProps {
   onOpenProfile: () => void
@@ -46,7 +47,7 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
   const [privateTabs, setPrivateTabs] = useState<Tab[]>([])
   const [activeTabId, setActiveTabId] = useState<string | null>(null)
   const [isPrivateMode, setIsPrivateMode] = useState(false)
-  const [currentView, setCurrentView] = useState<'browser' | 'alltabs' | 'home' | 'versions' | 'search-engine-info' | 'history' | 'bookmarks'>('home')
+  const [currentView, setCurrentView] = useState<'browser' | 'alltabs' | 'home' | 'versions' | 'search-engine-info' | 'history' | 'bookmarks' | 'search-indexing'>('home')
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [currentUrl, setCurrentUrl] = useState('')
@@ -331,6 +332,10 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
 
   const handleShowBookmarks = () => {
     setCurrentView('bookmarks')
+  }
+
+  const handleShowSearchIndexing = () => {
+    setCurrentView('search-indexing')
   }
 
   const togglePrivateMode = () => {
@@ -627,6 +632,8 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
                 // Update history with title (don't save private browsing history)
                 if (!isPrivateMode) {
                   addToHistory(currentUrl, currentDisplayUrl, title)
+                  // Index the page for search
+                  indexPageForSearch(currentDisplayUrl, title, '')
                 }
               } else if (currentTabs.length === 0 && currentDisplayUrl) {
                 // Create a new tab if none exists
@@ -706,6 +713,12 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
             }}
           />
         )}
+
+        {currentView === 'search-indexing' && (
+          <SearchIndexing 
+            onClose={() => setCurrentView('home')}
+          />
+        )}
       </div>
 
       <MainFooter
@@ -723,6 +736,7 @@ export const Browser: React.FC<BrowserProps> = ({ onOpenProfile, onOpenSettings 
         onShowAllTabs={handleShowAllTabs}
         onShowHistory={handleShowHistory}
         onShowBookmarks={handleShowBookmarks}
+        onShowSearchIndexing={handleShowSearchIndexing}
       />
     </div>
   )

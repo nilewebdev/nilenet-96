@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Home, Grid3X3, User, Settings, Clock, Star } from 'lucide-react'
+import { Home, Grid3X3, User, Settings, Clock, Star, Database } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface MainFooterProps {
@@ -10,6 +10,7 @@ interface MainFooterProps {
   onShowAllTabs: () => void
   onShowHistory: () => void
   onShowBookmarks: () => void
+  onShowSearchIndexing?: () => void
 }
 
 export const MainFooter: React.FC<MainFooterProps> = ({
@@ -18,7 +19,8 @@ export const MainFooter: React.FC<MainFooterProps> = ({
   onShowHome,
   onShowAllTabs,
   onShowHistory,
-  onShowBookmarks
+  onShowBookmarks,
+  onShowSearchIndexing
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border/50 p-2 z-40">
@@ -62,6 +64,18 @@ export const MainFooter: React.FC<MainFooterProps> = ({
           <Star className="h-4 w-4" />
           <span className="text-xs font-medium">saved*</span>
         </Button>
+
+        {onShowSearchIndexing && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onShowSearchIndexing}
+            className="flex flex-col items-center gap-1 px-2 py-2 transition-all duration-200 text-muted-foreground hover:text-foreground"
+          >
+            <Database className="h-4 w-4" />
+            <span className="text-xs font-medium">index*</span>
+          </Button>
+        )}
 
         <Button
           variant="ghost"

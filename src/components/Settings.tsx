@@ -243,7 +243,7 @@ export const Settings: React.FC<SettingsProps> = ({ onClose, onOpenProfile, onSh
           </div>
         </CardHeader>
         
-        <CardContent className="space-y-6 max-h-[70vh] overflow-y-auto">
+        <CardContent className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
               <Globe className="h-4 w-4" />
