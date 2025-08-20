@@ -2,13 +2,13 @@
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../frontend/dist",
+    "devPath": "http://localhost:8080",
+    "distDir": "../dist",
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "MyApp",
-    "version": "0.0.0"
+    "productName": "Nile Browser",
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
@@ -27,17 +27,12 @@
         "unmaximize": true,
         "unminimize": true,
         "startDragging": true
-      },
-      "app": {
-        "all": false,
-        "show": true,
-        "hide": true
       }
     },
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.myapp.dev",
+      "identifier": "com.nile.browser",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -61,7 +56,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "MyApp",
+        "title": "Nile Browser",
         "width": 1280,
         "height": 800,
         "minWidth": 800,
