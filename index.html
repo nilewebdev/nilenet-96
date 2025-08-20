@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>n.n* - private browser*</title>
+    <meta name="description" content="a mobile-first private browser pwa with elegant design and full account sync*" />
+    <meta name="author" content="Rheon Notisce - Gordon" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="n.n*" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.png" type="image/png" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="n.n* - private browser*" />
+    <meta property="og:description" content="a mobile-first private browser pwa with elegant design and full account sync*" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/icon.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="n.n* - private browser*" />
+    <meta name="twitter:description" content="a mobile-first private browser pwa with elegant design and full account sync*" />
+    <meta name="twitter:image" content="/icon.png" />
+
+    <!-- Mobile optimizations -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+
+      // PWA Install Prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install banner after a delay
+        setTimeout(() => {
+          if (deferredPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
+            const installBanner = document.createElement('div');
+            installBanner.innerHTML = `
+              <div style="
+                position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+                background: #000000;
+                color: white; padding: 16px 24px; border-radius: 8px;
+                font-family: system-ui; font-size: 14px; font-weight: 400;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+                z-index: 10000; cursor: pointer;
+                border: 1px solid #333;
+                transition: transform 0.2s ease;
+              " onclick="
+                this.style.transform = 'translateX(-50%) scale(0.95)';
+                setTimeout(() => {
+                  deferredPrompt.prompt();
+                  deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    this.remove();
+                  });
+                }, 100);
+              ">
+                add n.n* to home screen*
+              </div>
+            `;
+            document.body.appendChild(installBanner);
+            
+            // Auto-hide after 8 seconds
+            setTimeout(() => {
+              if (installBanner.parentNode) {
+                installBanner.remove();
+              }
+            }, 8000);
+          }
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>

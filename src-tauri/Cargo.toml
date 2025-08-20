@@ -1,0 +1,45 @@
+[package]
+name = "app"
+version = "0.0.0"
+description = "A Tauri App"
+authors = ["you"]
+license = ""
+repository = ""
+default-run = "app"
+edition = "2021"
+rust-version = "1.60"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "1.5", features = ["app-all", "shell-open", "window-all"] }
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
+# If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
+# DO NOT REMOVE!!
+custom-protocol = [ "tauri/custom-protocol" ]
+
+# Optimize for old hardware
+[profile.release]
+# Disable LTO for faster compilation on old hardware
+lto = false
+# More codegen units for parallel compilation
+codegen-units = 16
+# Optimize for size to reduce memory usage
+opt-level = "s"
+# Strip symbols to reduce binary size
+strip = true
+# Panic abort for smaller binaries
+panic = "abort"
+
+[profile.dev]
+# Faster incremental builds
+incremental = true
+# Less optimization for faster dev builds
+opt-level = 1
